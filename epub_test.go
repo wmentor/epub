@@ -2,21 +2,14 @@ package epub
 
 import (
 	"fmt"
+	"io/ioutil"
 	"testing"
 )
 
-func TestEpub(t *testing.T) {
-	bk, err := open(t, "./data/test.epub")
+func TestReader(t *testing.T) {
+	bk, err := Open("./data/test.epub")
 	if err != nil {
 		t.Fatal(err)
-	}
-	defer bk.Close()
-}
-
-func open(t *testing.T, f string) (*Book, error) {
-	bk, err := Open(f)
-	if err != nil {
-		return nil, err
 	}
 	defer bk.Close()
 
@@ -27,8 +20,21 @@ func open(t *testing.T, f string) (*Book, error) {
 	for _, pt := range bk.Ncx.Points {
 		for _, np := range pt.Points {
 			fmt.Println(np.Text + " . " + np.Content.Src)
+
+			input, err := bk.Open(np.Content.Src)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer input.Close()
+
+			data, err := ioutil.ReadAll(input)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			fmt.Println(string(data))
+
 		}
 	}
 
-	return bk, nil
 }
