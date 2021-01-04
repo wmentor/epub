@@ -19,7 +19,9 @@ go get github.com/wmentor/epub
 package main
 
 import (
-	"github.com/wmentor/epub"
+  "fmt"
+
+  "github.com/wmentor/epub"
 )
 
 func main() {
