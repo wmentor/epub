@@ -2,6 +2,7 @@ package epub
 
 import (
 	"archive/zip"
+	"io/ioutil"
 )
 
 func Open(fn string) (*Book, error) {
@@ -34,4 +35,45 @@ func Open(fn string) (*Book, error) {
 	}
 
 	return &bk, nil
+}
+
+func Reader(filename string, onChapter func(chapter string, data []byte) bool) error {
+	bk, err := Open(filename)
+	if err != nil {
+		return err
+	}
+	defer bk.Close()
+
+	if onChapter == nil {
+		return nil
+	}
+
+	readerF := func(filename string) ([]byte, error) {
+		fd, err := bk.Open(filename)
+		if err != nil {
+			return nil, err
+		}
+		defer fd.Close()
+
+		return ioutil.ReadAll(fd)
+	}
+
+	for _, pt := range bk.Ncx.Points {
+		for _, np := range pt.Points {
+
+			name := np.Text
+
+			data, err := readerF(np.Content.Src)
+			if err != nil {
+				return err
+			}
+
+			if !onChapter(name, data) {
+				return nil
+			}
+
+		}
+	}
+
+	return nil
 }
