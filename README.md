@@ -15,7 +15,7 @@ go get github.com/wmentor/epub
 
 ## Usage
 
-``golang
+```golang
 package main
 
 import (
