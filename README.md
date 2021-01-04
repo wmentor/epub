@@ -20,6 +20,7 @@ package main
 
 import (
   "fmt"
+  "os"
 
   "github.com/wmentor/epub"
 )
@@ -32,5 +33,8 @@ func main() {
   if err != nil {
     panic(err)
   }
+
+  // print epub to Stdout as text
+  epub.ToTxt("./data/test.epub", os.Stdout)
 }
 ```

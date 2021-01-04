@@ -1,6 +1,7 @@
 package epub
 
 import (
+	"bytes"
 	"testing"
 )
 
@@ -28,5 +29,13 @@ func TestReader(t *testing.T) {
 
 	if i != 182 {
 		t.Fatal("Invalid chapter numbers")
+	}
+
+	buf := bytes.NewBuffer(nil)
+
+	ToTxt("./data/test.epub", buf)
+
+	if buf.Len() == 0 {
+		t.Fatal("ToTxt failed")
 	}
 }
