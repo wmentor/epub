@@ -2,6 +2,7 @@ package epub
 
 import (
 	"bytes"
+	"fmt"
 	"testing"
 )
 
@@ -38,4 +39,6 @@ func TestReader(t *testing.T) {
 	if buf.Len() == 0 {
 		t.Fatal("ToTxt failed")
 	}
+
+	fmt.Println(buf.String())
 }

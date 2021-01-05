@@ -27,8 +27,8 @@ import (
 
 func main() {
 
-  err := epub.Reader("./data/test.epub", func(chapter string, content []byte) bool {
-    fmt.Println(chpater)
+  err := epub.Reader("./data/test.epub", func(chapter string, chapterHTML []byte) bool {
+    fmt.Println(chapter)
   })
   if err != nil {
     panic(err)
